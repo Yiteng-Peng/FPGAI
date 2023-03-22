@@ -4,3 +4,5 @@ __pycache__
 python/datasets/data
 *.pt
 *.pth
+
+references
