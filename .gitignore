@@ -1,8 +1,16 @@
 .idea
+.vscode
 __pycache__
 
-python/datasets/data
+python/data/*
+!python/data/README.md
+
+*.txt
+*.tuple
 *.pt
 *.pth
+
+*.o
+*.exe
 
 reference
