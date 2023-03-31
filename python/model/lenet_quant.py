@@ -58,15 +58,3 @@ class LeNet(nn.Module):
         self.c5.load_quant(quants[6], quants[7], quants[8])
         self.f6.load_quant(quants[9], quants[10], quants[11])
         self.output.load_quant(quants[12], quants[13], quants[14])
-
-if __name__ == "__main__":
-    # 瞎测试一下
-    x = torch.rand([1, 1, 28, 28]).round().int()
-    model = LeNet()
-    model.linear_quant()
-    model.eval()
-    with torch.no_grad():
-        print(model.get_quant())
-        model.load_quant([26, 2, 90, 26, 2, 90, 26, 2, 90, 26, 2, 90, 26, 2, 90])
-        print(model.get_quant())
-        y = model(x)
