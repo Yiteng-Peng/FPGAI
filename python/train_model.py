@@ -1,3 +1,4 @@
+import torch
 from torch import nn
 from config import *
 from torch.optim import lr_scheduler
@@ -14,6 +15,10 @@ train_dataloader = torch.utils.data.DataLoader(dataset=train_dataset, batch_size
 
 # 调用net定义的模型
 model = MODEL
+try:
+    model.load_state_dict(torch.load(RAW_MODEL_PATH))
+except:
+    pass
 
 # 定义损失函数（交叉熵）
 loss_fn = nn.CrossEntropyLoss()

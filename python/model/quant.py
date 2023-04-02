@@ -54,6 +54,13 @@ def quant_scale(scale, num_bits=8):
         warnings.warn("scale is 0, please check by manual", RuntimeWarning)
     return best_scale, best_shift
 
+class QuantReLU6(nn.Module):
+    def __init__(self):
+        self.gain = 256     # 增益
+
+    def forward(self, x):
+        return x * self.gain
+
 # 定义量化卷积和量化全连接
 class QuantLinear(nn.Linear):
     def __init__(self, in_features, out_features, bias=True):
@@ -69,8 +76,6 @@ class QuantLinear(nn.Linear):
     def linear_quant(self, quantize_bit=8):
         self.weight.data, self.scale, self.zero_point = quantize_tensor(self.weight.data, num_bits=quantize_bit)
         self.scale, self.shift = quant_scale(self.scale, quantize_bit)
-        self.bias_divide_scale = (self.bias * 256) / (self.scale / 2 ** self.shift)
-        self.bias_divide_scale = self.bias_divide_scale.round().int()
         self.quant_flag = True
 
     def load_quant(self, scale, shift, zero_point):
@@ -84,8 +89,9 @@ class QuantLinear(nn.Linear):
             self.qx_minus_zeropoint = self.qx_minus_zeropoint.round().int()
         except:
             self.qx_minus_zeropoint = self.qx_minus_zeropoint
-        self.bias_divide_scale = (self.bias * 256) / (self.scale / 2 ** self.shift)
-        self.bias_divide_scale = self.bias_divide_scale.round().int()
+        if self.bias is not None:
+            self.bias_divide_scale = (self.bias * 256) / (self.scale / 2 ** self.shift)
+            self.bias_divide_scale = self.bias_divide_scale.round().int()
 
         self.quant_flag = True
 
@@ -146,8 +152,6 @@ class QuantConv2d(nn.Conv2d):
     def conv_quant(self, quantize_bit=8):
         self.weight.data, self.scale, self.zero_point = quantize_tensor(self.weight.data, num_bits=quantize_bit)
         self.scale, self.shift = quant_scale(self.scale, quantize_bit)
-        self.bias_divide_scale = (self.bias * 256) / (self.scale / 2 ** self.shift)
-        self.bias_divide_scale = self.bias_divide_scale.round().int()
         self.quant_flag = True
 
     def load_quant(self, scale, shift, zero_point):
@@ -160,8 +164,9 @@ class QuantConv2d(nn.Conv2d):
             self.qx_minus_zeropoint = self.qx_minus_zeropoint.round().int()
         except:
             self.qx_minus_zeropoint = self.qx_minus_zeropoint
-        self.bias_divide_scale = (self.bias * 256) / (self.scale / 2 ** self.shift)
-        self.bias_divide_scale = self.bias_divide_scale.round().int()
+        if self.bias is not None:
+            self.bias_divide_scale = (self.bias * 256) / (self.scale / 2 ** self.shift)
+            self.bias_divide_scale = self.bias_divide_scale.round().int()
         self.quant_flag = True
 
     def forward(self, x):

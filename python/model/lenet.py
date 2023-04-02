@@ -13,6 +13,7 @@ class LeNet(nn.Module):
         self.flatten = nn.Flatten()
         self.f6 = nn.Linear(120, 84)
         self.output = nn.Linear(84, 10)
+
     def forward(self, x):
         x = self.Relu(self.c1(x))
         x = self.s2(x)
@@ -23,3 +24,6 @@ class LeNet(nn.Module):
         x = self.f6(x)
         x = self.output(x)
         return x
+
+    def eval_state_dict(self):
+        return self.state_dict()

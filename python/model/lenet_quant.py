@@ -1,5 +1,3 @@
-import torch
-from torch import nn
 from model.quant import *
 
 # 定义网络模型
@@ -30,15 +28,13 @@ class LeNet(nn.Module):
         return x
 
     def linear_quant(self, quantize_bit=8):
-        # Should be a less manual way to quantize
-        # Leave it for the future
-        self.c1.conv_quant(quantize_bit)
-        self.s2.pool_quant(quantize_bit)
-        self.c3.conv_quant(quantize_bit)
-        self.s4.pool_quant(quantize_bit)
-        self.c5.conv_quant(quantize_bit)
-        self.f6.linear_quant(quantize_bit)
-        self.output.linear_quant(quantize_bit)
+        for m in self.modules():
+            if isinstance(m, QuantConv2d):
+                m.conv_quant(quantize_bit)
+            elif isinstance(m, QuantMaxPool2d):
+                m.pool_quant(quantize_bit)
+            elif isinstance(m, QuantLinear):
+                m.linear_quant(quantize_bit)
 
     def get_quant(self):
         quant_list = [

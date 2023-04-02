@@ -36,6 +36,26 @@ model文件夹下保存模型，量化模型和numpy模型的源码，data文件
 
 在量化模型训练好的情况下，编译inference.c并运行，其中所欲运行的模型可在inference最前面部分选择
 
+## 模型
+
+目前已经支持的模型有：
+
+| 模型名称     | raw  | quant | np quant |
+| ------------ | ---- | ----- | -------- |
+| lenet        | √    | √     | √        |
+| mobilenet_v2 |      |       |          |
+|              |      |       |          |
+
+lenet网络结构：
+
+
+
+mobilenet_v2网络结构：
+
+其中第三层，即参数为6 24 2 2的层，当所用数据集为CIFAR-10的时候，stride需要改为1
+
+![img](https://img-blog.csdnimg.cn/20210516115659558.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NDc1MTI5NA==,size_16,color_FFFFFF,t_70)
+
 ## 参考资料
 
 [1] https://blog.csdn.net/weixin_43530173/article/details/124598231
