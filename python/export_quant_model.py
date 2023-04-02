@@ -64,7 +64,7 @@ def export_quant_model(model):
     for i, m in enumerate(model.modules()):
         if isinstance(m, QuantConv2d) or isinstance(m, QuantLinear):
             write_layer(fp_param, fp_quant, m)
-            print("layer %d", i)
+            print("layer %d" % i)
 
     fp_param.close()
     fp_quant.close()

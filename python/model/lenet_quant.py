@@ -7,7 +7,7 @@ class LeNet(nn.Module):
         super(LeNet, self).__init__()
 
         self.c1 = QuantConv2d(in_channels=1, out_channels=6, kernel_size=5, padding=2)
-        self.Relu = nn.ReLU()
+        self.Relu = QuantReLU1()
         self.s2 = QuantAvePool2d(kernel_size=2, stride=2)
         self.c3 = QuantConv2d(in_channels=6, out_channels=16, kernel_size=5)
         self.s4 = QuantAvePool2d(kernel_size=2, stride=2)
@@ -21,9 +21,9 @@ class LeNet(nn.Module):
         x = self.s2(x)
         x = self.Relu(self.c3(x))
         x = self.s4(x)
-        x = self.c5(x)
+        x = self.Relu(self.c5(x))
         x = self.flatten(x)
-        x = self.f6(x)
+        x = self.Relu(self.f6(x))
         x = self.output(x)
         return x
 

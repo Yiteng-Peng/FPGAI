@@ -38,7 +38,7 @@ int main(){
 
     MODEL_INIT(net, QUANT_PATH, PARAM_PATH);
 
-    int* data_list = read_mnist_images(DATASET_DATA, &num_images, &num_rows, &num_cols);
+    IMG_TYPE* data_list = read_mnist_images(DATASET_DATA, &num_images, &num_rows, &num_cols);
     unsigned char* label_list = read_mnist_labels(DATASET_LABEL);
 
     int i = 0; int count = 0;
@@ -46,10 +46,10 @@ int main(){
         Shape* shape = (Shape*)malloc(sizeof(Shape));
         shape->N = BATCH_SIZE;shape->C = 1;shape->H = num_cols;shape->W = num_rows;
 
-        int* batch_list = (int*)malloc(sizeof(int) * BATCH_SIZE * num_rows * num_cols);
-        memcpy(batch_list, &data_list[i * num_rows * num_cols], sizeof(int) * BATCH_SIZE * num_rows * num_cols);
+        IMG_TYPE* batch_list = (IMG_TYPE*)malloc(sizeof(IMG_TYPE) * BATCH_SIZE * num_rows * num_cols);
+        memcpy(batch_list, &data_list[i * num_rows * num_cols], sizeof(IMG_TYPE) * BATCH_SIZE * num_rows * num_cols);
 
-        int* result = MODEL_FORWARD(*net, &batch_list, shape, CLASS);
+        int* result = MODEL_FORWARD(*net, batch_list, shape, CLASS);
         count += count_TP(result, &label_list[i], BATCH_SIZE);
         free(shape);
     }

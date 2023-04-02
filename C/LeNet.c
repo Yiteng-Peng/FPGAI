@@ -186,6 +186,24 @@ void LeNet_init_param(LeNet* net, const char* param_path){
     printf("param load successful\n");
 }
 
+TYPE* ReLU1(int* x, int len){
+    TYPE* out_x = (TYPE*)malloc(sizeof(TYPE)*len);
+
+    int i = 0;
+    for(i = 0; i < len; i++) {
+        if(x[i] > 255){
+            out_x[i] = 255;
+        } else if (x[i] < 0){
+            out_x[i] = 0;
+        } else {
+            out_x[i] = x[i];
+        }
+    }
+
+    free(x);
+    return out_x;
+}
+
 void ReLU(int* x, int len){
     int i = 0;
     for(i = 0; i < len; i++) {
@@ -214,15 +232,22 @@ int* Argmax(int* x, int num, int class){
     return result;
 }
 
-int* LeNet_forward(LeNet net, int** x, Shape* shape, int class){
-    QuantConv2d_forward(net.c1, x, shape);
-    ReLU(*x, shape->N*shape->C*shape->H*shape->W);
-    QuantAvePool2d_forward(net.s2, x, shape);
-    QuantConv2d_forward(net.c3, x, shape);
-    ReLU(*x, shape->N*shape->C*shape->H*shape->W);
-    QuantAvePool2d_forward(net.s4, x, shape);
-    QuantConv2d_forward(net.c5, x, shape);
-    QuantLinear_forward(net.f6, x, shape->N);
-    QuantLinear_forward(net.output, x, shape->N);
-    return Argmax(*x, shape->N, class);
+int* LeNet_forward(LeNet net, TYPE* x, Shape* shape, int class){
+    int* mid_x;     // x的中间值，在每次乘加运算后会变成32位，之后用ReLU1激活到8位
+    mid_x = QuantConv2d_forward(net.c1, x, shape);
+    x = ReLU1(mid_x, shape->N*shape->C*shape->H*shape->W);
+    x = QuantAvePool2d_forward(net.s2, x, shape);
+
+    mid_x = QuantConv2d_forward(net.c3, x, shape);
+    x = ReLU1(mid_x, shape->N*shape->C*shape->H*shape->W);
+    x = QuantAvePool2d_forward(net.s4, x, shape);
+    
+    mid_x = QuantConv2d_forward(net.c5, x, shape);
+    x = ReLU1(mid_x, shape->N*shape->C*shape->H*shape->W);
+    
+    mid_x = QuantLinear_forward(net.f6, x, shape);
+    x = ReLU1(mid_x, shape->N*shape->C);
+    
+    mid_x = QuantLinear_forward(net.output, x, shape);
+    return Argmax(mid_x, shape->N, class);
 }

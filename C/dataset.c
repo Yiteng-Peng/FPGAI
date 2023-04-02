@@ -1,5 +1,6 @@
 #define _CRT_SECURE_NO_WARNINGS
 
+#include "dataset.h"
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -9,7 +10,7 @@ int swap_endian(int val)
 	return (val << 16) | (val >> 16);
 }
 
-int* read_mnist_images(const char *filename, int* num_images, int* num_rows, int* num_cols) {
+IMG_TYPE* read_mnist_images(const char *filename, int* num_images, int* num_rows, int* num_cols) {
     FILE *fp = fopen(filename, "rb");
     if (!fp) {
         printf("Failed to open file: %s\n", filename);
@@ -26,7 +27,7 @@ int* read_mnist_images(const char *filename, int* num_images, int* num_rows, int
 
     printf("%d, %d, %d, %d\n", magic_number, *num_images, *num_rows, *num_cols);
     int len_images_array = *num_images * *num_rows * *num_cols;
-    int* images = (int*)malloc(sizeof(int)*len_images_array);
+    IMG_TYPE* images = (IMG_TYPE*)malloc(sizeof(IMG_TYPE)*len_images_array);
 
     for (int i = 0; i < *num_images; i++) {
         for (int j = 0; j < *num_rows * *num_cols; j++) {

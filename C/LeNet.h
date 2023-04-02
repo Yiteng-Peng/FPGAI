@@ -28,9 +28,10 @@ void LeNet_load_uint8(unsigned char** list, FILE* fp, int num);
 
 void LeNet_layer_load_quant(LeNet* net, unsigned char quant_list[][3]);   // 为指定的层设置量化参数
 
+TYPE* ReLU1(int* x, int len);
 void ReLU(int* x, int len);
 int* Argmax(int* x, int num, int class);
 
-int* LeNet_forward(LeNet net, int** x, Shape* shape, int class);
+int* LeNet_forward(LeNet net, TYPE* x, Shape* shape, int class);
 
 #endif

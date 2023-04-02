@@ -7,17 +7,17 @@ DEVICE = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 
 # 数据集:[MNIST, CIFAR10, CIFAR100]
 data_transform = transforms.Compose([transforms.ToTensor()])
-TRAIN_DATASET = datasets.CIFAR10(root='./data', train=True, transform=data_transform, download=True)
-TEST_DATASET = datasets.CIFAR10(root='./data', train=False, transform=data_transform, download=True)
+TRAIN_DATASET = datasets.MNIST(root='./data', train=True, transform=data_transform, download=True)
+TEST_DATASET = datasets.MNIST(root='./data', train=False, transform=data_transform, download=True)
 
-MODEL_NAME = "VGG"
+MODEL_NAME = "lenet"
 # 训练
-MODEL = model.vgg.VGG().to(DEVICE)
+MODEL = model.lenet.LeNet().to(DEVICE)
 EPOCH = 20
 RAW_MODEL_PATH = "./pretrained/%s_raw.pth" % MODEL_NAME
 
 # 量化
-QUANT_MODEL = model.vgg_quant.VGG().to(DEVICE)  # model.lenet.LeNet().to(DEVICE)
+QUANT_MODEL = model.lenet_quant.LeNet().to(DEVICE)  # model.lenet.LeNet().to(DEVICE)
 QUANT_MODEL_PATH = "./quantization/%s_quant.tuple" % MODEL_NAME
 
 # numpy量化

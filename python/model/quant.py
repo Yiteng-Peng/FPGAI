@@ -54,12 +54,14 @@ def quant_scale(scale, num_bits=8):
         warnings.warn("scale is 0, please check by manual", RuntimeWarning)
     return best_scale, best_shift
 
-class QuantReLU6(nn.Module):
-    def __init__(self):
-        self.gain = 256     # 增益
-
+class QuantReLU1(nn.Module):
     def forward(self, x):
-        return x * self.gain
+        gain = 255  # 增益
+        index = torch.where(x > gain)
+        x[index] = gain
+        index = torch.where(x < 0)
+        x[index] = 0
+        return x
 
 # 定义量化卷积和量化全连接
 class QuantLinear(nn.Linear):

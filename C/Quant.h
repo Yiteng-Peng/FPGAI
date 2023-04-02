@@ -1,6 +1,9 @@
 #ifndef QUANT
 #define QUANT
 
+#define TYPE unsigned char
+#define TYPE_MIN UCHAR_MAX
+
 typedef struct{
     int N;
     int C;
@@ -8,11 +11,11 @@ typedef struct{
     int W;
 }Shape;
 
-int ListMax(int* x, int len);
-int ListMean(int* x, int len);
-int* GetMatrix2d(int* x, Shape shape, int n, int c, int h_start, int h_end, int w_start, int w_end);
-int LinearMultiple(int* x, unsigned char* y, unsigned char zero_point, int len);
-void Pad(int** x, int padding, Shape* shape);
+TYPE ListMax(TYPE* x, int len);
+TYPE ListMean(TYPE* x, int len);
+TYPE* GetMatrix2d(TYPE* x, Shape shape, int n, int c, int h_start, int h_end, int w_start, int w_end);
+int LinearMultiple(TYPE* x, unsigned char* y, unsigned char zero_point, int len);
+void Pad(TYPE** x, int padding, Shape* shape);
 
 typedef struct{
     unsigned int in_features;
@@ -26,21 +29,21 @@ typedef struct{
     int* quant_bias;
 }QuantLinear;
 
-void QuantLinear_forward(QuantLinear fc, int** x, int N);
+int* QuantLinear_forward(QuantLinear fc, TYPE* x, Shape* shape);
 
 typedef struct{
     unsigned char kernel_size;
     unsigned char stride;
 }QuantMaxPool2d;
 
-void QuantMaxPool2d_forward(QuantMaxPool2d pool, int** x, Shape* shape);
+TYPE* QuantMaxPool2d_forward(QuantMaxPool2d pool, TYPE* x, Shape* shape);
 
 typedef struct{
     unsigned char kernel_size;
     unsigned char stride;
 }QuantAvePool2d;
 
-void QuantAvePool2d_forward(QuantAvePool2d pool, int** x, Shape* shape);
+TYPE* QuantAvePool2d_forward(QuantAvePool2d pool, TYPE* x, Shape* shape);
 
 typedef struct{
     unsigned int in_channels;
@@ -58,6 +61,6 @@ typedef struct{
     int* quant_bias;
 }QuantConv2d;
 
-void QuantConv2d_forward(QuantConv2d conv, int** x, Shape* shape);
+int* QuantConv2d_forward(QuantConv2d conv, TYPE* x, Shape* shape);
 
 #endif
