@@ -101,7 +101,7 @@ class QuantLinear(nn.Linear):
             # return F.linear(x, weight, self.bias)
             return (F.linear(x.float(), self.qx_minus_zeropoint.float(), self.bias_divide_scale.float()) * self.scale).round().int() >> self.shift
         else:
-            return F.linear(x, self.weight, self.bias)
+            return F.linear(x.float(), self.weight, self.bias)
 
 class QuantAvePool2d(nn.AvgPool2d):
     def __init__(self, kernel_size, stride, padding=0):
@@ -118,7 +118,7 @@ class QuantAvePool2d(nn.AvgPool2d):
         if self.quant_flag == True:
             return F.avg_pool2d(x.float(), self.kernel_size, self.stride, self.padding).round().int()
         else:
-            return F.avg_pool2d(x, self.kernel_size, self.stride, self.padding)
+            return F.avg_pool2d(x.float(), self.kernel_size, self.stride, self.padding)
 
 class QuantMaxPool2d(nn.MaxPool2d):
     def __init__(self, kernel_size, stride, padding=0):
@@ -135,7 +135,7 @@ class QuantMaxPool2d(nn.MaxPool2d):
         if self.quant_flag == True:
             return F.max_pool2d(x.float(), self.kernel_size, self.stride, self.padding).round().int()
         else:
-            return F.max_pool2d(x, self.kernel_size, self.stride, self.padding)
+            return F.max_pool2d(x.float(), self.kernel_size, self.stride, self.padding)
 
 class QuantConv2d(nn.Conv2d):
     def __init__(self, in_channels, out_channels, kernel_size, stride=1,
@@ -177,5 +177,5 @@ class QuantConv2d(nn.Conv2d):
             return (F.conv2d(x.float(), self.qx_minus_zeropoint.float(), self.bias_divide_scale.float(), self.stride,
                             self.padding, self.dilation, self.groups) * self.scale).round().int() >> self.shift
         else:
-            return F.conv2d(x, self.weight, self.bias, self.stride,
+            return F.conv2d(x.float(), self.weight, self.bias, self.stride,
                             self.padding, self.dilation, self.groups)

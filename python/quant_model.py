@@ -4,9 +4,7 @@ from config import *
 model = QUANT_MODEL
 # normal
 raw_model = MODEL
-raw_state_dict = torch.load(RAW_MODEL_PATH)
-raw_model.load_state_dict(raw_state_dict)
-state_dict = raw_model.eval_state_dict()
+state_dict = torch.load(RAW_MODEL_PATH)
 
 model.load_state_dict(state_dict)
 

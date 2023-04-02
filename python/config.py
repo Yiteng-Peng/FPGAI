@@ -10,21 +10,21 @@ data_transform = transforms.Compose([transforms.ToTensor()])
 TRAIN_DATASET = datasets.CIFAR10(root='./data', train=True, transform=data_transform, download=True)
 TEST_DATASET = datasets.CIFAR10(root='./data', train=False, transform=data_transform, download=True)
 
-MODEL_NAME = "mobilenetV2"
+MODEL_NAME = "VGG"
 # 训练
-MODEL = model.mobilenet.MobileNetV2().to(DEVICE)
+MODEL = model.vgg.VGG().to(DEVICE)
 EPOCH = 20
 RAW_MODEL_PATH = "./pretrained/%s_raw.pth" % MODEL_NAME
 
 # 量化
-QUANT_MODEL = model.mobilenet_quant.MobileNetV2().to(DEVICE)
+QUANT_MODEL = model.vgg_quant.VGG().to(DEVICE)  # model.lenet.LeNet().to(DEVICE)
 QUANT_MODEL_PATH = "./quantization/%s_quant.tuple" % MODEL_NAME
 
 # numpy量化
-NP_QUANT_MODEL = model.lenet_np_quant.LeNet()
+NP_QUANT_MODEL = None   # model.lenet_np_quant.LeNet()
 
 # 测试
-RAW_TEST = False
+RAW_TEST = True
 QUANT_TEST = True
 NP_QUANT_TEST = False
 

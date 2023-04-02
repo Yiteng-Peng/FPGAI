@@ -43,8 +43,8 @@ model文件夹下保存模型，量化模型和numpy模型的源码，data文件
 | 模型名称     | raw  | quant | np quant |
 | ------------ | ---- | ----- | -------- |
 | lenet        | √    | √     | √        |
-| mobilenet_v2 |      |       |          |
-|              |      |       |          |
+| mobilenet_v2 | √    |       |          |
+| vgg          | √    | √     |          |
 
 lenet网络结构：
 
