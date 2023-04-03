@@ -11,7 +11,7 @@ plt.rcParams['axes.unicode_minus'] = False
 
 # 加载训练数据集
 train_dataset = TRAIN_DATASET
-train_dataloader = torch.utils.data.DataLoader(dataset=train_dataset, batch_size=32, shuffle=True)
+train_dataloader = torch.utils.data.DataLoader(dataset=train_dataset, batch_size=64, shuffle=True)
 
 # 调用net定义的模型
 model = MODEL

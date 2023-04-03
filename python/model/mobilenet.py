@@ -68,7 +68,7 @@ class MobileNetV2(nn.Module):
             # t, c, n, s
             [1, 16, 1, 1],
             [6, 24, 2, 1],  # Stride 2 -> 1 for CIFAR-10
-            [6, 32, 3, 2],
+            [6, 32, 3, 1],
             [6, 64, 4, 2],
             [6, 96, 3, 1],
             [6, 160, 3, 2],
@@ -78,7 +78,7 @@ class MobileNetV2(nn.Module):
         features = []
         # 初始层，将3通道转为32通道
         features += [
-            Conv3x3ReLU(in_channels=3, out_channels=32, stride=2),
+            Conv3x3ReLU(in_channels=3, out_channels=32, stride=1),
         ]
 
         # building inverted residual blocks
@@ -120,7 +120,7 @@ class MobileNetV2(nn.Module):
 
     def forward(self, x):
         x = self.features(x)
-        x = x.mean([2, 3])
+        x = x.mean([2, 3])      # 相当于一个均值pool层
         x = self.classifier(x)
         return x
 

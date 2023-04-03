@@ -1,9 +1,10 @@
 from config import *
 import numpy as np
 
+# DEVICE = torch.device("cuda:1" if torch.cuda.is_available() else "cpu")
 
 if RAW_TEST:
-    model = MODEL
+    model = MODEL.to(DEVICE)
     model.eval()
     model.load_state_dict(torch.load(RAW_MODEL_PATH))
     test_dataset = TEST_DATASET
@@ -17,7 +18,7 @@ if RAW_TEST:
         print("raw model:\t", np.mean(acc_list))
 
 if QUANT_TEST:
-    model = QUANT_MODEL
+    model = QUANT_MODEL.to(DEVICE)
     model.eval()
     state_dict, quant_list = torch.load(QUANT_MODEL_PATH)
     model.load_state_dict(state_dict)
@@ -34,7 +35,7 @@ if QUANT_TEST:
         print("quant model:\t", np.mean(acc_list))
 
 if NP_QUANT_TEST:
-    model = NP_QUANT_MODEL
+    model = NP_QUANT_MODEL.to(DEVICE)
     state_dict, quant_list = torch.load(QUANT_MODEL_PATH, map_location="cpu")
     model.load_quant(state_dict, quant_list)
 
