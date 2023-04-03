@@ -10,7 +10,7 @@ data_transform = transforms.Compose([transforms.ToTensor()])
 TRAIN_DATASET = datasets.CIFAR10(root='./data', train=True, transform=data_transform, download=True)
 TEST_DATASET = datasets.CIFAR10(root='./data', train=False, transform=data_transform, download=True)
 
-MODEL_NAME = "ResNet18"
+MODEL_NAME = "ResNet50"
 # 训练
 MODEL = model.resnet.ResNet().to(DEVICE)
 EPOCH = 20
