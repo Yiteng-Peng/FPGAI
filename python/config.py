@@ -10,24 +10,32 @@ data_transform = transforms.Compose([transforms.ToTensor()])
 TRAIN_DATASET = datasets.CIFAR10(root='./data', train=True, transform=data_transform, download=True)
 TEST_DATASET = datasets.CIFAR10(root='./data', train=False, transform=data_transform, download=True)
 
-MODEL_NAME = "ResNet50"
+'''
+lenet
+mobilenetV2
+ResNet18 ResNet34 ResNet50 (注：使用前记得调整模型至对应参数)
+'''
+MODEL_NAME = "ResNet18"
 # 训练
-MODEL = model.resnet.ResNet().to(DEVICE)
+MODEL = model.resnet.ResNet
 EPOCH = 20
 RAW_MODEL_PATH = "./pretrained/%s_raw.pth" % MODEL_NAME
 
 # 量化
-QUANT_MODEL = None  # model.lenet.LeNet().to(DEVICE)
+QUANT_MODEL = model.resnet_quant.ResNet
 QUANT_MODEL_PATH = "./quantization/%s_quant.tuple" % MODEL_NAME
 
 # numpy量化
-NP_QUANT_MODEL = None   # model.lenet_np_quant.LeNet()
+NP_QUANT_MODEL = model.lenet_np_quant.LeNet
 
 # 测试
 RAW_TEST = True
-QUANT_TEST = False
+QUANT_TEST = True
 NP_QUANT_TEST = False
 
 # 导出
-WEIGHT_TXT_PATH = "./txt_model/%s_weight.txt" % MODEL_NAME
-QUANT_TXT_PATH = "./txt_model/%s_quant.txt" % MODEL_NAME
+EXPORT_MODE = "txt"     # "bin" or "txt"
+WEIGHT_BIN_PATH = "./export_model/%s_weight.bin" % MODEL_NAME
+BIAS_BIN_PATH = "./export_model/%s_bias.bin" % MODEL_NAME
+WEIGHT_TXT_PATH = "./export_model/%s_weight.txt" % MODEL_NAME
+QUANT_TXT_PATH = "./export_model/%s_quant.txt" % MODEL_NAME

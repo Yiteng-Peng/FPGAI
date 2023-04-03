@@ -8,4 +8,5 @@ import model.mobilenet_quant as mobilenet_quant
 import model.vgg as vgg
 import model.vgg_quant as vgg_quant
 
-import model.resnet as ResNet
+import model.resnet as resnet
+import model.resnet_quant as resnet_quant

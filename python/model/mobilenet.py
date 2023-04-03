@@ -16,14 +16,14 @@ class ReLU1(nn.Module):
 # DW卷积
 def Conv3x3ReLU(in_channels, out_channels, stride):
     return nn.Sequential(
-            nn.Conv2d(in_channels=in_channels, out_channels=out_channels, kernel_size=3, stride=stride, padding=1, bias=False),
+            nn.Conv2d(in_channels=in_channels, out_channels=out_channels, kernel_size=3, stride=stride, padding=1),
             ReLU1()
         )
 
 # PW卷积
 def Conv1x1ReLU(in_channels,out_channels):
     return nn.Sequential(
-            nn.Conv2d(in_channels=in_channels, out_channels=out_channels, kernel_size=1, stride=1, bias=False),
+            nn.Conv2d(in_channels=in_channels, out_channels=out_channels, kernel_size=1, stride=1),
             ReLU1()
         )
 

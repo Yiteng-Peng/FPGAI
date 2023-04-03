@@ -8,7 +8,7 @@ train_dataset = TRAIN_DATASET
 train_dataloader = torch.utils.data.DataLoader(dataset=train_dataset, batch_size=64, shuffle=True)
 
 # 调用net定义的模型
-model = MODEL
+model = MODEL().to(DEVICE)
 try:
     model.load_state_dict(torch.load(RAW_MODEL_PATH))
 except:

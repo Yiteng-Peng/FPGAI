@@ -24,11 +24,13 @@ model文件夹下保存模型，量化模型和numpy模型的源码，data文件
 
 ### 4、导出
 
-- 运行export_quant_model，导出量化模型的txt文本保存。权重和量化参数的对应默认保存路径为：\./txt\_model/\{model\_name\}\_weight\.txt和\./txt\_model/\{model_name\}\_quant\.txt。
+- 运行export_quant_model，导出量化模型的txt文本保存。权重和量化参数的对应默认保存路径为：`./export_model/{model_name}_weight.txt` 和 `./export_model/{model_name}_quant.txt`。
 
   其中weight的格式为，按层数以此导出，每10个数据一行，逗号分割。每层的weight前有单独一行#，每层的bias前有单独一行$。
 
   其中bias的格式为，每行三个数据，逗号分割，分别对应scale，shift，zero_point。
+  
+- 考虑到模型体积问题，增加以二进制格式导出的方式，weight为8位无符号整型，bias为32位有符号整型，quant依然为文本格式导出
 
 ## C
 

@@ -11,10 +11,6 @@
 const char* DATASET_DATA = "../python/data/MNIST/raw/t10k-images-idx3-ubyte";
 const char* DATASET_LABEL = "../python/data/MNIST/raw/t10k-labels-idx1-ubyte";
 
-// 量化参数和权重bias所在位置
-const char* QUANT_PATH = "../python/txt_model/lenet_quant.txt";
-const char* PARAM_PATH = "../python/txt_model/lenet_weight.txt";
-
 #define MODEL LeNet
 #define MODEL_INIT LeNet_init
 #define MODEL_FORWARD LeNet_forward
@@ -36,7 +32,7 @@ int main(){
     MODEL* net = (MODEL*)malloc(sizeof(MODEL));
     int num_images, num_rows, num_cols;
 
-    MODEL_INIT(net, QUANT_PATH, PARAM_PATH);
+    MODEL_INIT(net);
 
     IMG_TYPE* data_list = read_mnist_images(DATASET_DATA, &num_images, &num_rows, &num_cols);
     unsigned char* label_list = read_mnist_labels(DATASET_LABEL);

@@ -1,9 +1,9 @@
 from config import *
 
 # 调用net定义的模型
-model = QUANT_MODEL
+model = QUANT_MODEL().to(DEVICE)
 # normal
-raw_model = MODEL
+raw_model = MODEL().to(DEVICE)
 state_dict = torch.load(RAW_MODEL_PATH)
 
 model.load_state_dict(state_dict)

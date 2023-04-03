@@ -3,6 +3,13 @@
 #include <stdio.h>
 #include "Quant.h"
 
+// 量化参数和权重bias所在位置
+#define QUANT_PATH "../python/export_model/lenet_quant.txt"
+#define PARAM_PATH "../python/export_model/lenet_weight.txt"
+#define BIN_WEIGHT_PATH "../python/export_model/lenet_weight.bin"
+#define BIN_BIAS_PATH "../python/export_model/lenet_bias.bin"
+
+
 #define TRUE  1
 #define FALSE 0
 
@@ -16,17 +23,12 @@ typedef struct{
     QuantLinear     output;
 }LeNet;
 
-void LeNet_init(LeNet* net, const char* quant_path, const char* param_path);          // 调用其他的初始化函数
+void LeNet_init(LeNet* net);          // 调用其他的初始化函数
 
 void LeNet_init_base(LeNet* net);           // 网络参数的搭建
-void LeNet_init_quant(LeNet* net, const char* quant_path);    // 网络量化参数的设置
-void LeNet_init_param(LeNet* net, const char* param_path);    // 网络具体参数的读入
-
-void LeNet_load_tag_check(FILE* fp, char check);
-void LeNet_load_int(int** list, FILE* fp, int num);
-void LeNet_load_uint8(unsigned char** list, FILE* fp, int num);
-
-void LeNet_layer_load_quant(LeNet* net, unsigned char quant_list[][3]);   // 为指定的层设置量化参数
+void LeNet_txt_init_quant(LeNet* net, const char* quant_path);    // 网络量化参数的设置
+void LeNet_txt_init_param(LeNet* net, const char* param_path);    // 网络具体参数的读入
+void LeNet_bin_init_param(LeNet* net, const char* weight_path, const char* bias_path);
 
 TYPE* ReLU1(int* x, int len);
 void ReLU(int* x, int len);

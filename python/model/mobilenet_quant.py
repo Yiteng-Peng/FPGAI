@@ -5,7 +5,7 @@ def Conv3x3BNReLU(in_channels, out_channels, stride, groups):
     return nn.Sequential(
         QuantConv2d(in_channels=in_channels, out_channels=out_channels, kernel_size=3, stride=stride, padding=1,
                     groups=groups, bias=False),
-        QuantReLU6()
+        QuantReLU1()
     )
 
 
@@ -13,7 +13,7 @@ def Conv3x3BNReLU(in_channels, out_channels, stride, groups):
 def Conv1x1BNReLU(in_channels, out_channels):
     return nn.Sequential(
         QuantConv2d(in_channels=in_channels, out_channels=out_channels, kernel_size=1, stride=1, bias=False),
-        QuantReLU6()
+        QuantReLU1()
     )
 
 
