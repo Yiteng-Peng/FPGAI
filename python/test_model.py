@@ -1,7 +1,7 @@
 from config import *
 import numpy as np
 
-DEVICE = torch.device("cuda:1" if torch.cuda.is_available() else "cpu")
+# DEVICE = torch.device("cuda:1" if torch.cuda.is_available() else "cpu")
 
 if RAW_TEST:
     model = MODEL.to(DEVICE)

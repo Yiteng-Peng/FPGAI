@@ -16,12 +16,12 @@ class ReLU1(nn.Module):
 
 def conv3x3(in_planes, out_planes, stride=1):
     """3x3 convolution with padding"""
-    return nn.Conv2d(in_planes, out_planes, kernel_size=3, stride=stride)
+    return nn.Conv2d(in_planes, out_planes, kernel_size=3, padding=1, stride=stride)
 
 
 def conv1x1(in_planes, out_planes, stride=1):
     """1x1 convolution"""
-    return nn.Conv2d(in_planes, out_planes, kernel_size=1, padding=1, stride=stride)
+    return nn.Conv2d(in_planes, out_planes, kernel_size=1, stride=stride)
 
 
 class BasicBlock(nn.Module):
@@ -30,7 +30,7 @@ class BasicBlock(nn.Module):
     def __init__(self, inplanes, planes, stride=1, downsample=None):
         super(BasicBlock, self).__init__()
         # Both self.conv1 and self.downsample layers downsample the input when stride != 1
-        self.conv1 = conv3x3(inplanes, planes, stride)
+        self.conv1 = conv3x3(inplanes, planes, stride=stride)
         self.relu = ReLU1()
         self.conv2 = conv3x3(planes, planes)
         self.downsample = downsample
@@ -90,7 +90,7 @@ class ResNet(nn.Module):
 
         self.inplanes = 64
         self.conv1 = nn.Conv2d(3, self.inplanes, kernel_size=3, stride=1, padding=1)
-        self.relu = ReLU1(inplace=True)
+        self.relu = ReLU1()
         self.maxpool = nn.MaxPool2d(kernel_size=3, stride=2, padding=1)
         self.layer1 = self._make_layer(block, 64, layers[0], stride=1)
         self.layer2 = self._make_layer(block, 128, layers[1], stride=2)
@@ -126,7 +126,7 @@ class ResNet(nn.Module):
         x = self.layer3(x)
         x = self.layer4(x)
 
-        x = x.reshape(x.size(0), -1)
+        x = x.mean([2, 3])
         x = self.fc(x)
 
         return x
