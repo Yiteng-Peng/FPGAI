@@ -1,4 +1,4 @@
-import torch
+from tqdm import tqdm
 from torch import nn
 from config import *
 from torch.optim import lr_scheduler
@@ -50,7 +50,7 @@ def matplot_acc(train_acc):
 def train(dataloader, model, loss_fn, optimizer):
     model.train()
     loss, current, n = 0.0, 0.0, 0
-    for batch, (X, y) in enumerate(dataloader):
+    for batch, (X, y) in enumerate(tqdm(dataloader)):
         # 前向传播
         X, y = X.to(DEVICE), y.to(DEVICE)
         output = model(X)

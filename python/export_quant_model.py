@@ -7,41 +7,51 @@ model.load_state_dict(state_dict)
 model.load_quant(quant_list)
 
 def write_layer(fp_param, fp_quant, layer):
-    # 每10个数据分一段
+    # 每100个数据分一段
     # weight
     fp_param.write("#\n")
     if isinstance(layer, QuantConv2d):
         num = 0
+        buf = ""
         for i in range(layer.weight.shape[0]):
             for j in range(layer.weight.shape[1]):
                 for k in range(layer.weight.shape[2]):
                     for index in range(layer.weight.shape[3]):
-                        fp_param.write(str(int(layer.weight[i][j][k][index])))
+                        buf += str(int(layer.weight[i][j][k][index]))
                         num += 1
                         if num % 10 == 0 or num == layer.weight.numel():
-                            fp_param.write("\n")
+                            buf += "\n"
+                            fp_param.write(buf)
+                            buf = ""
                         else:
-                            fp_param.write(",")
+                            buf += ","
     else:
         num = 0
+        buf = ""
         for i in range(layer.weight.shape[0]):
             for j in range(layer.weight.shape[1]):
-                fp_param.write(str(int(layer.weight[i][j])))
+                buf += str(int(layer.weight[i][j]))
                 num += 1
                 if num % 10 == 0 or num == layer.weight.numel():
-                    fp_param.write("\n")
+                    buf += "\n"
+                    fp_param.write(buf)
+                    buf = ""
                 else:
-                    fp_param.write(",")
+                    buf += ","
     # bias
-    fp_param.write("$\n")
-    num = 0
-    for i in range(layer.bias_divide_scale.shape[0]):
-        fp_param.write(str(int(layer.bias_divide_scale[i])))
-        num += 1
-        if num % 10 == 0 or num == layer.bias_divide_scale.numel():
-            fp_param.write("\n")
-        else:
-            fp_param.write(",")
+    if layer.bias_divide_scale is not None:
+        fp_param.write("$\n")
+        num = 0
+        buf = ""
+        for i in range(layer.bias_divide_scale.shape[0]):
+            buf += str(int(layer.bias_divide_scale[i]))
+            num += 1
+            if num % 10 == 0 or num == layer.bias_divide_scale.numel():
+                buf += "\n"
+                fp_param.write(buf)
+                buf = ""
+            else:
+                buf += ","
 
     # quant
     fp_quant.write(str(layer.scale))

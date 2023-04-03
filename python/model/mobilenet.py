@@ -1,30 +1,30 @@
 import torch.nn as nn
+import torch
 
 __all__ = [
     "MobileNetV2",
 ]
 
+class ReLU1(nn.Module):
+    def forward(self, x):
+        index = torch.where(x > 1)
+        x[index] = 1
+        index = torch.where(x < 0)
+        x[index] = 0
+        return x
+
 # DW卷积
-def Conv3x3BNReLU(in_channels,out_channels,stride,groups):
+def Conv3x3ReLU(in_channels, out_channels, stride):
     return nn.Sequential(
-            nn.Conv2d(in_channels=in_channels, out_channels=out_channels, kernel_size=3, stride=stride, padding=1, groups=groups, bias=False),
-            nn.BatchNorm2d(out_channels),
-            nn.ReLU6(inplace=True)
+            nn.Conv2d(in_channels=in_channels, out_channels=out_channels, kernel_size=3, stride=stride, padding=1, bias=False),
+            ReLU1()
         )
 
 # PW卷积
-def Conv1x1BNReLU(in_channels,out_channels):
+def Conv1x1ReLU(in_channels,out_channels):
     return nn.Sequential(
             nn.Conv2d(in_channels=in_channels, out_channels=out_channels, kernel_size=1, stride=1, bias=False),
-            nn.BatchNorm2d(out_channels),
-            nn.ReLU6(inplace=True)
-        )
-
-# PW卷积（没有使用激活函数）
-def Conv1x1BN(in_channels,out_channels):
-    return nn.Sequential(
-            nn.Conv2d(in_channels=in_channels, out_channels=out_channels, kernel_size=1, stride=1, bias=False),
-            nn.BatchNorm2d(out_channels)
+            ReLU1()
         )
 
 class Msg(nn.Module):
@@ -48,11 +48,11 @@ class InvertedResidual(nn.Module):
         # 先1x1卷积升维，再1x1卷积降维
         self.bottleneck = nn.Sequential(
             # 升维操作: 扩充维度是 in_channels * expansion_factor (6倍)
-            Conv1x1BNReLU(in_channels, mid_channels),
+            Conv1x1ReLU(in_channels, mid_channels),
             # DW卷积,降低参数量
-            Conv3x3BNReLU(mid_channels, mid_channels, stride, groups=mid_channels),
+            Conv3x3ReLU(mid_channels, mid_channels, stride),
             # 降维操作: 降维度 in_channels * expansion_factor(6倍) 降维到指定 out_channels 维度
-            Conv1x1BN(mid_channels, out_channels)
+            Conv1x1ReLU(mid_channels, out_channels)
         )
 
     def forward(self, x):
@@ -78,7 +78,7 @@ class MobileNetV2(nn.Module):
         features = []
         # 初始层，将3通道转为32通道
         features += [
-            Conv3x3BNReLU(in_channels=3, out_channels=32, stride=2,groups=1),
+            Conv3x3ReLU(in_channels=3, out_channels=32, stride=2),
         ]
 
         # building inverted residual blocks
@@ -95,7 +95,7 @@ class MobileNetV2(nn.Module):
         
         # 升维，将320维升至1280维
         features += [
-            Conv1x1BNReLU(320, 1280),
+            Conv1x1ReLU(320, 1280),
         ]
         self.features = nn.Sequential(*features)
 

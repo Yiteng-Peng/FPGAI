@@ -40,21 +40,28 @@ model文件夹下保存模型，量化模型和numpy模型的源码，data文件
 
 目前已经支持的模型有：
 
-| 模型名称     | raw  | quant | np quant |
-| ------------ | ---- | ----- | -------- |
-| lenet        | √    | √     | √        |
-| mobilenet_v2 | √    |       |          |
-| vgg          | √    | √     |          |
+| 模型名称     | raw  | quant | np quant | C·INT8 |
+| ------------ | ---- | ----- | -------- | ------ |
+| lenet        | √    | √     | √        | √      |
+| mobilenet_v2 | √    |       |          |        |
+| ResNet       | √    |       |          |        |
+| vgg          | √    | √     |          |        |
 
-lenet网络结构：
+**lenet网络结构**：
 
+![img](https://img-blog.csdnimg.cn/d0db1f76faf044cfb9eeff0026df5f5c.png)
 
-
-mobilenet_v2网络结构：
+**mobilenet_v2网络结构**：
 
 其中第三层，即参数为6 24 2 2的层，当所用数据集为CIFAR-10的时候，stride需要改为1
 
 ![img](https://img-blog.csdnimg.cn/20210516115659558.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NDc1MTI5NA==,size_16,color_FFFFFF,t_70)
+
+**ResNet结构**：
+
+18和34用的是BasicBlock，50层以后的用的是Bottleneck
+
+![img](https://pic1.zhimg.com/v2-181cd2dc1d4dc7f3cb05f844d96017f4_b.jpg)
 
 ## 参考资料
 
