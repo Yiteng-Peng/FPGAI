@@ -3,6 +3,8 @@ import warnings
 from torch import nn
 import torch.nn.functional as F
 
+GAIN = 255
+
 # 定义量化和反量化函数
 def quantize_tensor(x, num_bits=8):
     qmin = 0.
@@ -56,7 +58,7 @@ def quant_scale(scale, num_bits=8):
 
 class QuantReLU1(nn.Module):
     def forward(self, x):
-        gain = 255  # 增益
+        gain = GAIN  # 增益
         index = torch.where(x > gain)
         x[index] = gain
         index = torch.where(x < 0)
@@ -67,7 +69,7 @@ class QuantReLU1(nn.Module):
 class QuantLinear(nn.Linear):
     def __init__(self, in_features, out_features, bias=True):
         super(QuantLinear, self).__init__(in_features, out_features, bias)
-        # out = conv(in * (q_x - z_p) + bias * 256 / scale) * scale
+        # out = conv(in * (q_x - z_p) + bias * GAIN / scale) * scale
         self.quant_flag = False
         self.scale = None
         self.shift = None
@@ -92,7 +94,7 @@ class QuantLinear(nn.Linear):
         except:
             self.qx_minus_zeropoint = self.qx_minus_zeropoint
         if self.bias is not None:
-            self.bias_divide_scale = (self.bias * 256) / (self.scale / 2 ** self.shift)
+            self.bias_divide_scale = (self.bias * GAIN) / (self.scale / 2 ** self.shift)
             self.bias_divide_scale = self.bias_divide_scale.round().int()
 
         self.quant_flag = True
@@ -167,7 +169,7 @@ class QuantConv2d(nn.Conv2d):
         except:
             self.qx_minus_zeropoint = self.qx_minus_zeropoint
         if self.bias is not None:
-            self.bias_divide_scale = (self.bias * 256) / (self.scale / 2 ** self.shift)
+            self.bias_divide_scale = (self.bias * GAIN) / (self.scale / 2 ** self.shift)
             self.bias_divide_scale = self.bias_divide_scale.round().int()
         self.quant_flag = True
 

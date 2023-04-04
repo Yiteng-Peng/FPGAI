@@ -15,7 +15,7 @@ lenet
 mobilenetV2
 ResNet18 ResNet34 ResNet50 (注：使用前记得调整模型至对应参数)
 '''
-MODEL_NAME = "ResNet18"
+MODEL_NAME = "ResNet50"
 # 训练
 MODEL = model.resnet.ResNet
 EPOCH = 20

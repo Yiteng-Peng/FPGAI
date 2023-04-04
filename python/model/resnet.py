@@ -86,7 +86,7 @@ cfgs = {
 class ResNet(nn.Module):
     def __init__(self, num_classes=10):
         super(ResNet, self).__init__()
-        block, layers = cfgs["18"]
+        block, layers = cfgs["50"]
 
         self.inplanes = 64
         self.conv1 = nn.Conv2d(3, self.inplanes, kernel_size=3, stride=1, padding=1)
