@@ -29,8 +29,8 @@ QUANT_MODEL_PATH = "./quantization/%s_quant.tuple" % MODEL_NAME
 NP_QUANT_MODEL = model.lenet_np_quant.LeNet
 
 # 测试
-RAW_TEST = True
-QUANT_TEST = False
+RAW_TEST = False
+QUANT_TEST = True
 NP_QUANT_TEST = False
 
 # 导出

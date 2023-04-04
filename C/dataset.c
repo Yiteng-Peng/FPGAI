@@ -3,6 +3,7 @@
 #include "dataset.h"
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 int swap_endian(int val)
 {
@@ -66,4 +67,23 @@ unsigned char* read_mnist_labels(const char *filename) {
 
     printf("label load successful\n");
     return labels;
+}
+
+// 读取CIFAR-10数据集的函数
+int read_cifar10(FILE *fp, unsigned char *data, unsigned char *labels, int batch, int* num) {
+    const int bytes_per_image = 1 + CIFAR10_IMAGE_SIZE; // 每张图片大小（3*32*32+1，其中1是标签)
+    unsigned char buffer[1 + CIFAR10_IMAGE_SIZE];
+
+    int i;
+    for(i = 0; i < batch; i++){
+        if (fread(buffer, bytes_per_image, 1, fp) == 1) {
+            labels[i] = buffer[0];
+            memcpy(&data[i*CIFAR10_IMAGE_SIZE], &buffer[1], sizeof(unsigned char)*CIFAR10_IMAGE_SIZE);
+        } else {
+            break;
+        }
+    }
+
+    *num = i;
+    return 0;
 }

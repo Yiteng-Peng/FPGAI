@@ -2,6 +2,8 @@
 .vscode
 __pycache__
 
+C/data/*
+!C/data/README.md
 python/data/*
 !python/data/README.md
 

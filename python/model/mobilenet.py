@@ -129,28 +129,28 @@ class MobileNetV2(nn.Module):
         # 因为量化模型用于评估，用不上这些参数，带着反而不方便之后的操作
         eval_state_dict = self.state_dict()
 
-        def pop_batchnorm(name:str):
-            eval_state_dict.pop(name + ".weight")
-            eval_state_dict.pop(name + ".bias")
-            eval_state_dict.pop(name + ".running_mean")
-            eval_state_dict.pop(name + ".running_var")
-            eval_state_dict.pop(name + ".num_batches_tracked")
-
-        # 初始层
-        index = 0       # 在features中所处的层的位置
-        pop_batchnorm("features.%s.1" % index)
-        index += 1
-
-        for t, c, n, s in self.inverted_residual_setting:
-            for i in range(n):
-                key = "features.%s.bottleneck.%s.1"
-                pop_batchnorm(key % (index, "0"))
-                pop_batchnorm(key % (index, "1"))
-                pop_batchnorm(key % (index, "2"))
-                index += 1
-
-        # 升维层
-        pop_batchnorm("features.%s.1" % index)
+        # def pop_batchnorm(name:str):
+        #     eval_state_dict.pop(name + ".weight")
+        #     eval_state_dict.pop(name + ".bias")
+        #     eval_state_dict.pop(name + ".running_mean")
+        #     eval_state_dict.pop(name + ".running_var")
+        #     eval_state_dict.pop(name + ".num_batches_tracked")
+        #
+        # # 初始层
+        # index = 0       # 在features中所处的层的位置
+        # pop_batchnorm("features.%s.1" % index)
+        # index += 1
+        #
+        # for t, c, n, s in self.inverted_residual_setting:
+        #     for i in range(n):
+        #         key = "features.%s.bottleneck.%s.1"
+        #         pop_batchnorm(key % (index, "0"))
+        #         pop_batchnorm(key % (index, "1"))
+        #         pop_batchnorm(key % (index, "2"))
+        #         index += 1
+        #
+        # # 升维层
+        # pop_batchnorm("features.%s.1" % index)
 
         # 分类层
         eval_state_dict["classifier.0.weight"] = \

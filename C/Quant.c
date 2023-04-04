@@ -1,7 +1,6 @@
 #define _CRT_SECURE_NO_WARNINGS
 
 #include "Quant.h"
-#include "LeNet.h"
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -24,6 +23,18 @@ TYPE ListMean(TYPE* x, int len){
         sum += x[i];
     }
     return (TYPE)(sum / len);
+}
+
+void IntAddUint8(int* A, unsigned char* B, int len){
+    int i;
+    for(i = 0; i < len; i++)
+        A[i] += B[i];
+}
+
+void IntAddInt(int* A, int* B, int len){
+    int i;
+    for(i = 0; i < len; i++)
+        A[i] += B[i];
 }
 
 TYPE* GetMatrix2d(TYPE* x, Shape shape, int n, int c, int h_start, int h_end, int w_start, int w_end){
@@ -83,6 +94,53 @@ void Pad(TYPE** x, int padding, Shape* shape){
     free(in_x);
     shape->H = shape->H+2*padding; shape->W = shape->W+2*padding;
     *x = out_x;
+}
+
+
+TYPE* ReLU1(int* x, int len){
+    TYPE* out_x = (TYPE*)malloc(sizeof(TYPE)*len);
+
+    int i = 0;
+    for(i = 0; i < len; i++) {
+        if(x[i] > 255){
+            out_x[i] = 255;
+        } else if (x[i] < 0){
+            out_x[i] = 0;
+        } else {
+            out_x[i] = x[i];
+        }
+    }
+
+    free(x);
+    return out_x;
+}
+
+void ReLU(int* x, int len){
+    int i = 0;
+    for(i = 0; i < len; i++) {
+        if(x[i] > 0){
+            x[i] = x[i];
+        } else {
+            x[i] = 0;
+        }
+    }
+}
+
+int* Argmax(int* x, int num, int class){
+    int* result = (int*)malloc(sizeof(int)*num);
+    int i, j;
+    for(i = 0; i < num; i++){
+        result[i] = 0;
+        int max = INT_MIN;
+        for(j = 0; j < class; j++){
+            if(x[i*num+j] > max){
+                max = x[i*num+j];
+                result[i] = j;
+            }
+        }
+    }
+    free(x);
+    return result;
 }
 
 int* QuantLinear_forward(QuantLinear fc, TYPE* x, Shape* shape){

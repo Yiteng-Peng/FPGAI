@@ -109,83 +109,17 @@ void LeNet_bin_init_param(LeNet* net, const char* weight_path, const char* bias_
     FILE *fp_bias = fopen(bias_path, "rb");
     if(!fp_bias){printf("Failed to open file: %s\n", bias_path);exit(1);}
 
-    int num = 0;
+    bin_load_conv(&net->c1, fp_weight, fp_bias);
+    bin_load_conv(&net->c3, fp_weight, fp_bias);
+    bin_load_conv(&net->c5, fp_weight, fp_bias);
 
-    num = net->c1.in_channels * net->c1.out_channels * net->c1.kernel_size * net->c1.kernel_size;
-    bin_load_uint8(&net->c1.quant_weight, fp_weight, num);
-    num = net->c1.out_channels;
-    bin_load_int(&net->c1.quant_bias, fp_bias, num);
-
-    num = net->c3.in_channels * net->c3.out_channels * net->c3.kernel_size * net->c3.kernel_size;
-    bin_load_uint8(&net->c3.quant_weight, fp_weight, num);
-    num = net->c3.out_channels;
-    bin_load_int(&net->c3.quant_bias, fp_bias, num);
-
-    num = net->c5.in_channels * net->c5.out_channels * net->c5.kernel_size * net->c5.kernel_size;
-    bin_load_uint8(&net->c5.quant_weight, fp_weight, num);
-    num = net->c5.out_channels;
-    bin_load_int(&net->c5.quant_bias, fp_bias, num);
-
-    num = net->f6.in_features * net->f6.out_features;
-    bin_load_uint8(&net->f6.quant_weight, fp_weight, num);
-    num = net->f6.out_features;
-    bin_load_int(&net->f6.quant_bias, fp_bias, num);
-
-    num = net->output.in_features * net->output.out_features;
-    bin_load_uint8(&net->output.quant_weight, fp_weight, num);
-    num = net->output.out_features;
-    bin_load_int(&net->output.quant_bias, fp_bias, num);
+    bin_load_fc(&net->f6, fp_weight, fp_bias);
+    bin_load_fc(&net->output, fp_weight, fp_bias);
     
     fclose(fp_weight);
     fclose(fp_bias);
 
     printf("param load successful\n");
-}
-
-TYPE* ReLU1(int* x, int len){
-    TYPE* out_x = (TYPE*)malloc(sizeof(TYPE)*len);
-
-    int i = 0;
-    for(i = 0; i < len; i++) {
-        if(x[i] > 255){
-            out_x[i] = 255;
-        } else if (x[i] < 0){
-            out_x[i] = 0;
-        } else {
-            out_x[i] = x[i];
-        }
-    }
-
-    free(x);
-    return out_x;
-}
-
-void ReLU(int* x, int len){
-    int i = 0;
-    for(i = 0; i < len; i++) {
-        if(x[i] > 0){
-            x[i] = x[i];
-        } else {
-            x[i] = 0;
-        }
-    }
-}
-
-int* Argmax(int* x, int num, int class){
-    int* result = (int*)malloc(sizeof(int)*num);
-    int i, j;
-    for(i = 0; i < num; i++){
-        result[i] = 0;
-        int max = INT_MIN;
-        for(j = 0; j < class; j++){
-            if(x[i*num+j] > max){
-                max = x[i*num+j];
-                result[i] = j;
-            }
-        }
-    }
-    free(x);
-    return result;
 }
 
 int* LeNet_forward(LeNet net, TYPE* x, Shape* shape, int class){

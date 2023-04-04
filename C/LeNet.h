@@ -30,10 +30,6 @@ void LeNet_txt_init_quant(LeNet* net, const char* quant_path);    // 网络量�
 void LeNet_txt_init_param(LeNet* net, const char* param_path);    // 网络具体参数的读入
 void LeNet_bin_init_param(LeNet* net, const char* weight_path, const char* bias_path);
 
-TYPE* ReLU1(int* x, int len);
-void ReLU(int* x, int len);
-int* Argmax(int* x, int num, int class);
-
 int* LeNet_forward(LeNet net, TYPE* x, Shape* shape, int class);
 
 #endif

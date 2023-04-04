@@ -1,3 +1,4 @@
+#define _CRT_SECURE_NO_WARNINGS
 #include "Load.h"
 
 void txt_load_quant(FILE* fp, unsigned char* scale, unsigned char* shift, unsigned char* zero_point){
@@ -97,4 +98,20 @@ void bin_load_int(int** list, FILE* fp, int num){
         fread(&temp, sizeof(int), 1, fp);
         (*list)[i] = temp;
     }
+}
+
+void bin_load_conv(QuantConv2d* layer, FILE* fp_weight, FILE* fp_bias){
+    int num = 0;
+    num = layer->in_channels * layer->out_channels * layer->kernel_size * layer->kernel_size;
+    bin_load_uint8(&layer->quant_weight, fp_weight, num);
+    num = layer->out_channels;
+    bin_load_int(&layer->quant_bias, fp_bias, num);
+}
+
+void bin_load_fc(QuantLinear* layer, FILE* fp_weight, FILE* fp_bias){
+    int num = 0;
+    num = layer->in_features * layer->out_features;
+    bin_load_uint8(&layer->quant_weight, fp_weight, num);
+    num = layer->out_features;
+    bin_load_int(&layer->quant_bias, fp_bias, num);
 }

@@ -3,6 +3,7 @@
 
 #define TYPE unsigned char
 #define TYPE_MIN UCHAR_MAX
+#define IntAddType IntAddUint8
 
 typedef struct{
     int N;
@@ -13,9 +14,18 @@ typedef struct{
 
 TYPE ListMax(TYPE* x, int len);
 TYPE ListMean(TYPE* x, int len);
+
+void IntAddUint8(int* A, unsigned char* B, int len);
+void IntAddInt(int* A, int* B, int len);
+
 TYPE* GetMatrix2d(TYPE* x, Shape shape, int n, int c, int h_start, int h_end, int w_start, int w_end);
 int LinearMultiple(TYPE* x, unsigned char* y, unsigned char zero_point, int len);
+
 void Pad(TYPE** x, int padding, Shape* shape);
+
+TYPE* ReLU1(int* x, int len);
+void ReLU(int* x, int len);
+int* Argmax(int* x, int num, int class);
 
 typedef struct{
     unsigned int in_features;
