@@ -6,6 +6,7 @@ python/data/*
 !python/data/README.md
 
 *.txt
+!*_quant.txt
 *.tuple
 *.pt
 *.pth
