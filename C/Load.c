@@ -82,8 +82,8 @@ void bin_load_uint8(unsigned char** list, FILE* fp, int num){
     char buffer[1024];
     *list = (unsigned char*)malloc(sizeof(unsigned char)*num);
 
-    int i = 0;unsigned char temp;
-    for (i = 0; i < num; i++) {
+    unsigned char temp;
+    for (int i = 0; i < num; i++) {
         fread(&temp, sizeof(unsigned char), 1, fp);
         (*list)[i] = temp;
     }
@@ -93,8 +93,8 @@ void bin_load_int(int** list, FILE* fp, int num){
     char buffer[1024];
     *list = (int*)malloc(sizeof(int)*num);
 
-    int i = 0;int temp;
-    for (i = 0; i < num; i++) {
+    int temp;
+    for (int i = 0; i < num; i++) {
         fread(&temp, sizeof(int), 1, fp);
         (*list)[i] = temp;
     }

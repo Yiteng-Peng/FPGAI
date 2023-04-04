@@ -47,8 +47,7 @@ void ResNet_init_base(ResNet* net){
     const int stride_list[] = {1, 2, 2, 2};
 
     // 主干层
-    int i;
-    for(i = 0; i < 4; i++){
+    for(int i = 0; i < 4; i++){
         int block_num = cfgs[ResNet50][i];
         net->layers[i] = (BLOCKTYPE*)malloc(sizeof(BLOCKTYPE)*block_num);
         
@@ -77,10 +76,9 @@ void ResNet_param_count(ResNet net) {
 
     sum += 3 * 64 * 3 * 3;
 
-    int i, j;
-    for (i = 0; i < 4; i++) {
+    for (int i = 0; i < 4; i++) {
         int block_num = cfgs[ResNet50][i];
-        for (j = 0; j < block_num; j++) {
+        for (int j = 0; j < block_num; j++) {
             sum += net.layers[i][j].conv1.in_channels * net.layers[i][j].conv1.out_channels * net.layers[i][j].conv1.kernel_size * net.layers[i][j].conv1.kernel_size;
             sum += net.layers[i][j].conv2.in_channels * net.layers[i][j].conv2.out_channels * net.layers[i][j].conv2.kernel_size * net.layers[i][j].conv2.kernel_size;
             sum += net.layers[i][j].conv3.in_channels * net.layers[i][j].conv3.out_channels * net.layers[i][j].conv3.kernel_size * net.layers[i][j].conv3.kernel_size;
@@ -121,10 +119,9 @@ void ResNet_txt_init_quant(ResNet* net, const char* quant_path){
     txt_load_quant(fp, &net->conv1.scale, &net->conv1.shift, &net->conv1.zero_point);
 
     // 主干层
-    int i, j;
-    for(i = 0; i < 4; i++){
+    for(int i = 0; i < 4; i++){
         int block_num = cfgs[ResNet50][i];
-        for(j = 0; j < block_num; j++){
+        for(int j = 0; j < block_num; j++){
             BLOCK_TXT_INIT_QUANT(&net->layers[i][j], fp);
         }
     }
@@ -147,10 +144,9 @@ void ResNet_bin_init_param(ResNet* net, const char* weight_path, const char* bia
     bin_load_conv(&net->conv1, fp_weight, fp_bias);
 
     // 主干层
-    int i, j;
-    for(i = 0; i < 4; i++){
+    for(int i = 0; i < 4; i++){
         int block_num = cfgs[ResNet50][i];
-        for(j = 0; j < block_num; j++){
+        for(int j = 0; j < block_num; j++){
             BLOCK_BIN_INIT_PARAM(&net->layers[i][j], fp_weight, fp_bias);
         }
     }
@@ -200,10 +196,9 @@ int* ResNet_forward(ResNet net, TYPE* x, Shape* shape, int class){
     Pad(&x, 1, shape);
     x = QuantMaxPool2d_forward(net.maxpool, x, shape);
 
-    int i, j;
-    for(i = 0; i < 4; i++){
+    for(int i = 0; i < 4; i++){
         int block_num = cfgs[ResNet50][i];
-        for(j = 0; j < block_num; j++){
+        for(int j = 0; j < block_num; j++){
             x = BLOCK_FORWARD(net.layers[i][j], x, shape);
         }
     }

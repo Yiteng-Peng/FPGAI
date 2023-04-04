@@ -7,8 +7,7 @@
 TYPE ListMax(TYPE* x, int len){
     TYPE max = TYPE_MIN;
 
-    int i = 0;
-    for(i = 0; i < len; i++){
+    for(int i = 0; i < len; i++){
         if(max < x[i])
             max = x[i];
     }
@@ -18,22 +17,19 @@ TYPE ListMax(TYPE* x, int len){
 TYPE ListMean(TYPE* x, int len){
     int sum = 0;
 
-    int i = 0;
-    for(i = 0; i < len; i++){
+    for(int i = 0; i < len; i++){
         sum += x[i];
     }
     return (TYPE)(sum / len);
 }
 
 void IntAddUint8(int* A, unsigned char* B, int len){
-    int i;
-    for(i = 0; i < len; i++)
+    for(int i = 0; i < len; i++)
         A[i] += B[i];
 }
 
 void IntAddInt(int* A, int* B, int len){
-    int i;
-    for(i = 0; i < len; i++)
+    for(int i = 0; i < len; i++)
         A[i] += B[i];
 }
 
@@ -42,9 +38,9 @@ TYPE* GetMatrix2d(TYPE* x, Shape shape, int n, int c, int h_start, int h_end, in
     TYPE* slice = (TYPE*)malloc(sizeof(TYPE)*slice_len);
     int base_index = n*shape.C*shape.H*shape.W + c*shape.H*shape.W;
 
-    int i,j; int count = 0; int index = 0;
-    for(i = h_start; i < h_end; i++){
-        for(j = w_start; j < w_end; j++){
+    int count = 0; int index = 0;
+    for(int i = h_start; i < h_end; i++){
+        for(int j = w_start; j < w_end; j++){
             index = base_index + i * shape.W + j;
             slice[count] = x[index];
             count++;
@@ -55,8 +51,7 @@ TYPE* GetMatrix2d(TYPE* x, Shape shape, int n, int c, int h_start, int h_end, in
 
 int LinearMultiple(TYPE* x, unsigned char* y, unsigned char zero_point, int len){
     int result = 0;
-    int i = 0;
-    for(i = 0; i < len; i++){
+    for(int i = 0; i < len; i++){
         result += x[i] * y[i];
         result -= x[i] * zero_point;
     }
@@ -69,16 +64,15 @@ void Pad(TYPE** x, int padding, Shape* shape){
     TYPE* in_x = *x;
     TYPE* out_x = (TYPE*)malloc(sizeof(TYPE)*shape->N*shape->C*(shape->H+2*padding)*(shape->W+2*padding));
 
-    int N_i,C_i,H_i,W_i;
-    for(N_i = 0; N_i < shape->N; N_i++){
-        for(C_i = 0; C_i < shape->C; C_i++){
+    for(int N_i = 0; N_i < shape->N; N_i++){
+        for(int C_i = 0; C_i < shape->C; C_i++){
             int pad_base_index = (shape->H + 2 * padding) * (shape->W + 2 * padding);
             pad_base_index = N_i * shape->C * pad_base_index + C_i * pad_base_index;
             int base_index = shape->H * shape->W;
             base_index = N_i * shape->C * base_index + C_i * base_index;
 
-            for(H_i = 0; H_i < shape->H + 2*padding; H_i++){
-                for(W_i = 0; W_i < shape->W + 2*padding; W_i++){
+            for(int H_i = 0; H_i < shape->H + 2*padding; H_i++){
+                for(int W_i = 0; W_i < shape->W + 2*padding; W_i++){
                     int pad_index = H_i * (shape->W+2*padding) + W_i + pad_base_index;
                     int index = (H_i-padding) * shape->W + W_i-padding + base_index;
                     if (H_i < padding || W_i < padding || H_i >= shape->H + padding || W_i >= shape->W + padding){
@@ -100,8 +94,7 @@ void Pad(TYPE** x, int padding, Shape* shape){
 TYPE* ReLU1(int* x, int len){
     TYPE* out_x = (TYPE*)malloc(sizeof(TYPE)*len);
 
-    int i = 0;
-    for(i = 0; i < len; i++) {
+    for(int i = 0; i < len; i++) {
         if(x[i] > 255){
             out_x[i] = 255;
         } else if (x[i] < 0){
@@ -116,8 +109,7 @@ TYPE* ReLU1(int* x, int len){
 }
 
 void ReLU(int* x, int len){
-    int i = 0;
-    for(i = 0; i < len; i++) {
+    for(int i = 0; i < len; i++) {
         if(x[i] > 0){
             x[i] = x[i];
         } else {
@@ -128,13 +120,13 @@ void ReLU(int* x, int len){
 
 int* Argmax(int* x, int num, int class){
     int* result = (int*)malloc(sizeof(int)*num);
-    int i, j;
-    for(i = 0; i < num; i++){
+
+    for(int i = 0; i < num; i++){
         result[i] = 0;
         int max = INT_MIN;
-        for(j = 0; j < class; j++){
-            if(x[i*num+j] > max){
-                max = x[i*num+j];
+        for(int j = 0; j < class; j++){
+            if(x[i * class + j] > max){
+                max = x[i * class + j];
                 result[i] = j;
             }
         }
@@ -146,9 +138,8 @@ int* Argmax(int* x, int num, int class){
 int* QuantLinear_forward(QuantLinear fc, TYPE* x, Shape* shape){
     int* out_x = (int*)malloc(sizeof(int) * shape->N * fc.out_features);
 
-    int i, j;
-    for(i = 0; i < shape->N; i++){
-        for(j = 0; j < fc.out_features; j++){
+    for(int i = 0; i < shape->N; i++){
+        for(int j = 0; j < fc.out_features; j++){
             int index = i*fc.out_features + j;
             out_x[index] = LinearMultiple(&x[i*fc.in_features], &fc.quant_weight[j*fc.in_features], fc.zero_point, fc.in_features);
             out_x[index] = out_x[index] + fc.quant_bias[j];
@@ -172,9 +163,8 @@ TYPE* QuantAvePool2d_forward(QuantAvePool2d pool, TYPE* x, Shape* shape){
     int num_N = shape->C * num_C;
     int base_index = 0;
 
-    int H_i, W_i, N_i, C_i;
-    for(H_i = 0; H_i < H_out; H_i++){
-        for(W_i = 0; W_i < W_out; W_i++){
+    for(int H_i = 0; H_i < H_out; H_i++){
+        for(int W_i = 0; W_i < W_out; W_i++){
             int h_start = H_i * pool.stride;
             int h_end = h_start + pool.kernel_size;
             int w_start = W_i * pool.stride;
@@ -182,8 +172,8 @@ TYPE* QuantAvePool2d_forward(QuantAvePool2d pool, TYPE* x, Shape* shape){
 
             base_index = H_i * W_out + W_i;
 
-            for(N_i = 0; N_i < shape->N; N_i++){
-                for(C_i = 0; C_i < shape->C; C_i++){
+            for(int N_i = 0; N_i < shape->N; N_i++){
+                for(int C_i = 0; C_i < shape->C; C_i++){
                     TYPE* slice = GetMatrix2d(x, *shape, N_i, C_i, h_start, h_end, w_start, w_end);
                     out_x[N_i*num_N + C_i*num_C + base_index] = ListMean(slice, pool.kernel_size*pool.kernel_size);
                     free(slice);
@@ -207,9 +197,8 @@ TYPE* QuantMaxPool2d_forward(QuantMaxPool2d pool, TYPE* x, Shape* shape){
     int num_N = shape->C * num_C;
     int base_index = 0;
 
-    int H_i, W_i, N_i, C_i;
-    for(H_i = 0; H_i < H_out; H_i++){
-        for(W_i = 0; W_i < W_out; W_i++){
+    for(int H_i = 0; H_i < H_out; H_i++){
+        for(int W_i = 0; W_i < W_out; W_i++){
             int h_start = H_i * pool.stride;
             int h_end = h_start + pool.kernel_size;
             int w_start = W_i * pool.stride;
@@ -217,8 +206,8 @@ TYPE* QuantMaxPool2d_forward(QuantMaxPool2d pool, TYPE* x, Shape* shape){
 
             base_index = H_i * W_out + W_i;
 
-            for(N_i = 0; N_i < shape->N; N_i++){
-                for(C_i = 0; C_i < shape->C; C_i++){
+            for(int N_i = 0; N_i < shape->N; N_i++){
+                for(int C_i = 0; C_i < shape->C; C_i++){
                     TYPE* slice = GetMatrix2d(x, *shape, N_i, C_i, h_start, h_end, w_start, w_end);
                     out_x[N_i*num_N + C_i*num_C + base_index] = ListMax(slice, pool.kernel_size*pool.kernel_size);
                     free(slice);
@@ -243,9 +232,8 @@ int* QuantConv2d_forward(QuantConv2d conv, TYPE* x, Shape* shape){
     int num_N = conv.out_channels * num_C;
     int base_index = 0;
 
-    int H_i, W_i, N_i, C_i, C_o;
-    for(H_i = 0; H_i < H_out; H_i++){
-        for(W_i = 0; W_i < W_out; W_i++){
+    for(int H_i = 0; H_i < H_out; H_i++){
+        for(int W_i = 0; W_i < W_out; W_i++){
             int h_start = H_i * conv.stride;
             int h_end = h_start + conv.kernel_size;
             int w_start = W_i * conv.stride;
@@ -253,12 +241,12 @@ int* QuantConv2d_forward(QuantConv2d conv, TYPE* x, Shape* shape){
 
             base_index = H_i * W_out + W_i;
 
-            for(N_i = 0; N_i < shape->N; N_i++){
-                for(C_o = 0; C_o < conv.out_channels; C_o++){
+            for(int N_i = 0; N_i < shape->N; N_i++){
+                for(int C_o = 0; C_o < conv.out_channels; C_o++){
                     int index = N_i*num_N + C_o*num_C + base_index;
                     out_x[index] = 0;
                     int conv_size = conv.kernel_size * conv.kernel_size;
-                    for(C_i = 0; C_i < shape->C; C_i++){
+                    for(int C_i = 0; C_i < shape->C; C_i++){
                         TYPE* slice = GetMatrix2d(x, *shape, N_i, C_i, h_start, h_end, w_start, w_end);
                         out_x[index] = out_x[index] + LinearMultiple(slice, &conv.quant_weight[(C_o*shape->C + C_i)*conv_size], conv.zero_point, conv_size);
                         free(slice);

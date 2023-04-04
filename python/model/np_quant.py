@@ -1,5 +1,10 @@
 import numpy as np
 
+def ReLU1(x):
+    x = np.where(x > 255, 255, x)
+    x = np.where(x < 0, 0, x)
+    return x
+
 def ReLU(x):
     return np.maximum(0, x)
 

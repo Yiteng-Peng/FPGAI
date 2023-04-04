@@ -4,10 +4,10 @@
 #include "Quant.h"
 
 // 量化参数和权重bias所在位置
-#define QUANT_PATH "../python/export_model/lenet_quant.txt"
-#define PARAM_PATH "../python/export_model/lenet_weight.txt"
-#define BIN_WEIGHT_PATH "../python/export_model/lenet_weight.bin"
-#define BIN_BIAS_PATH "../python/export_model/lenet_bias.bin"
+#define QUANT_PATH "E:/PengYiteng/FPGAI/python/export_model/lenet_quant.txt"
+#define PARAM_PATH "E:/PengYiteng/FPGAI/python/export_model/lenet_weight.txt"
+#define BIN_WEIGHT_PATH "E:/PengYiteng/FPGAI/python/export_model/lenet_weight.bin"
+#define BIN_BIAS_PATH "E:/PengYiteng/FPGAI/python/export_model/lenet_bias.bin"
 
 
 #define TRUE  1

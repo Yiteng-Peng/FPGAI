@@ -35,12 +35,12 @@ if QUANT_TEST:
         print("quant model:\t", np.mean(acc_list))
 
 if NP_QUANT_TEST:
-    model = NP_QUANT_MODEL().to(DEVICE)
+    model = NP_QUANT_MODEL()
     state_dict, quant_list = torch.load(QUANT_MODEL_PATH, map_location="cpu")
     model.load_quant(state_dict, quant_list)
 
     test_dataset = TEST_DATASET
-    test_dataloader = torch.utils.data.DataLoader(dataset=test_dataset, batch_size=100)
+    test_dataloader = torch.utils.data.DataLoader(dataset=test_dataset, batch_size=2)
     with torch.no_grad():
         acc_list = []
         for X, y in test_dataloader:

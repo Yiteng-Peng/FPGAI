@@ -11,13 +11,13 @@ class LeNet():
         self.output = QuantLinear(84, 10)
 
     def forward(self, x):
-        x = ReLU(self.c1.forward(x))
+        x = ReLU1(self.c1.forward(x))
         x = self.s2.forward(x)
-        x = ReLU(self.c3.forward(x))
+        x = ReLU1(self.c3.forward(x))
         x = self.s4.forward(x)
-        x = self.c5.forward(x)
+        x = ReLU1(self.c5.forward(x))
         x = x.reshape((x.shape[0], -1))
-        x = self.f6.forward(x)
+        x = ReLU1(self.f6.forward(x))
         x = self.output.forward(x)
         return x
 
