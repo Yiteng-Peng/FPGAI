@@ -3,6 +3,7 @@
 #include "Quant.h"
 #include <stdio.h>
 #include <stdlib.h>
+#include <limits.h>
 
 TYPE ListMax(TYPE* x, int len){
     TYPE max = TYPE_MIN;
