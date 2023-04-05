@@ -69,7 +69,7 @@ model文件夹下保存模型，量化模型和numpy模型的源码，data文件
 
 ![img](https://pic1.zhimg.com/v2-181cd2dc1d4dc7f3cb05f844d96017f4_b.jpg)
 
-**注：下图为https://www.jianshu.com/p/085f4c8256f1中的参考图，ResNet50图片细节似乎有些问题，只做理解参考**
+**注：下图为 https://www.jianshu.com/p/085f4c8256f1 中的参考图，ResNet50图片细节似乎有些问题，只做理解参考**
 
 ![在这里插入图片描述](https://img-blog.csdnimg.cn/20191219110451136.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0NoZXVuZ2xlaWxlaQ==,size_16,color_FFFFFF,t_70)
 
