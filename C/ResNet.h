@@ -15,10 +15,10 @@
 #define BLOCK_EXPANSION 4 // BasicBlock:1 Bottleneck:4
 
 // 量化参数和权重bias所在位置
-#define QUANT_PATH "E:/PengYiteng/FPGAI/python/export_model/ResNet50_quant.txt"
+#define QUANT_PATH "../python/export_model/ResNet50_quant.txt"
 #define PARAM_PATH "../python/export_model/ResNet50_weight.txt"
-#define BIN_WEIGHT_PATH "E:/PengYiteng/FPGAI/python/export_model/ResNet50_weight.bin"
-#define BIN_BIAS_PATH "E:/PengYiteng/FPGAI/python/export_model/ResNet50_bias.bin"
+#define BIN_WEIGHT_PATH "../python/export_model/ResNet50_weight.bin"
+#define BIN_BIAS_PATH "../python/export_model/ResNet50_bias.bin"
 
 typedef struct{
     QuantConv2d     conv1;

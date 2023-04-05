@@ -7,11 +7,12 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <time.h>
 
 // 数据集所在位置，一般来说先运行python后会自动下载该数据集
-const char* MNIST_DATA_PATH = "E:/PengYiteng/FPGAI/python/data/MNIST/raw/t10k-images-idx3-ubyte";
-const char* MNIST_LABEL_PATH = "E:/PengYiteng/FPGAI/python/data/MNIST/raw/t10k-labels-idx1-ubyte";
-const char* CIFAR10_PATH = "E:/PengYiteng/FPGAI/C/data/cifar-10/test_batch.bin";
+const char* MNIST_DATA_PATH = "../python/data/MNIST/raw/t10k-images-idx3-ubyte";
+const char* MNIST_LABEL_PATH = "../python/data/MNIST/raw/t10k-labels-idx1-ubyte";
+const char* CIFAR10_PATH = "../C/data/cifar-10/test_batch.bin";
 
 #define MODEL ResNet
 #define MODEL_INIT ResNet_init
@@ -66,6 +67,9 @@ int count_TP(int* x, unsigned char* y, int len) {
 
 // ResNet CIFAR10
 int main(){
+    clock_t start,end,tmp_end;
+    start = clock();
+
     MODEL* net = (MODEL*)malloc(sizeof(MODEL));
 
     MODEL_INIT(net);
@@ -91,8 +95,16 @@ int main(){
         shape.N = num_images;shape.C = 3;shape.H = 32;shape.W = 32;
 
         int* result = MODEL_FORWARD(*net, data_list, &shape, CLASS);
-        count += count_TP(result, &label_list[i], BATCH_SIZE);
+        count += count_TP(result, label_list, BATCH_SIZE);
+        if(i % 100 == 0){
+            tmp_end = clock();
+            printf("%d: time=%f\n", i, (double)(tmp_end-start)/CLK_TCK);
+            printf("%f\n", count * 1.0 / ((i + 1) * BATCH_SIZE));
+        }
     }
+
+    end = clock();
+    printf("time=%f\n",(double)(end-start)/CLK_TCK);
 
     fclose(fp);
     printf("%f\n", count * 1.0 / (10000 / SCALE));

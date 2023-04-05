@@ -66,6 +66,7 @@ void ResNet_init_base(ResNet* net){
         }
     }
 
+    net->avgpool.kernel_size = 2; net->avgpool.stride = 2;
     // 全连接层
     net->fc.in_features = 512 * BLOCK_EXPANSION;
     net->fc.out_features= 10;

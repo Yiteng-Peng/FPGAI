@@ -2,8 +2,8 @@
 .vscode
 __pycache__
 
-C/data/*
-!C/data/README.md
+C/data/cifar-10/*
+!C/data/cifar-10/test_batch.bin
 python/data/*
 !python/data/README.md
 

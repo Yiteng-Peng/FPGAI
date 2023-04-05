@@ -5,8 +5,9 @@ import numpy as np
 
 if RAW_TEST:
     model = MODEL().to(DEVICE)
-    model.eval()
     model.load_state_dict(torch.load(RAW_MODEL_PATH))
+    model.eval()
+
     test_dataset = TEST_DATASET
     test_dataloader = torch.utils.data.DataLoader(dataset=test_dataset, batch_size=100)
     with torch.no_grad():
@@ -19,10 +20,10 @@ if RAW_TEST:
 
 if QUANT_TEST:
     model = QUANT_MODEL().to(DEVICE)
-    model.eval()
     state_dict, quant_list = torch.load(QUANT_MODEL_PATH)
     model.load_state_dict(state_dict)
     model.load_quant(quant_list)
+    model.eval()
 
     test_dataset = TEST_DATASET
     test_dataloader = torch.utils.data.DataLoader(dataset=test_dataset, batch_size=100)

@@ -2,7 +2,7 @@
 #define QUANT
 
 #define TYPE unsigned char
-#define TYPE_MIN UCHAR_MAX
+#define TYPE_MIN 0
 #define IntAddType IntAddUint8
 
 typedef struct{
