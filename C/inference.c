@@ -27,7 +27,7 @@ const char* CIFAR10_PATH = "../C/data/cifar-10/test_batch.bin";
 // #define MODEL_FORWARD LeNet_forward
 
 #define SCALE 1
-#define BATCH_SIZE 10
+#define BATCH_SIZE 1
 #define CLASS 10
 
 int count_TP(int* x, unsigned char* y, int len) {
@@ -100,10 +100,10 @@ int main(){
 
         int* result = MODEL_FORWARD(*net, data_list, &shape, CLASS);
         count += count_TP(result, label_list, BATCH_SIZE);
-        if(i % 100 == 0){
+        if(i % 1 == 0){
             tmp_end = clock();
             printf("%d: time=%f\n", i, (double)(tmp_end-start)/CLK_TCK);
-            printf("%f\n", count * 1.0 / ((i + 1) * BATCH_SIZE));
+            printf("%f\n", count * 1.0 / (i + BATCH_SIZE));
         }
     }
 
