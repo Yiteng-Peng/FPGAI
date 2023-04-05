@@ -9,6 +9,10 @@
 #include <string.h>
 #include <time.h>
 
+# ifndef CLK_TCK
+# define CLK_TCK CLOCKS_PER_SEC
+# endif
+
 // 数据集所在位置，一般来说先运行python后会自动下载该数据集
 const char* MNIST_DATA_PATH = "../python/data/MNIST/raw/t10k-images-idx3-ubyte";
 const char* MNIST_LABEL_PATH = "../python/data/MNIST/raw/t10k-labels-idx1-ubyte";
